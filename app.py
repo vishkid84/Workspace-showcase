@@ -12,12 +12,10 @@ app = Flask(__name__)
 app.config["MONGO_DBNAME"] = 'workspace_database'
 app.config["MONGO_URI"] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
-mongo = PyMongo(app)
 
 @app.route('/')
-@app.route('/get_workspaces')
-def get_workspaces():
-    return "Hello World again"
+def hello():
+    return "Hello World!"
 
 
 if __name__ == '__main__':
