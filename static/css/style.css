@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Lato:wght@300;400;700;900&display=swap');
 
 body{
-    font-family: 'Lato', sans-serif;, 'Fjalla One', sans-serif;
+    font-family: 'Lato', sans-serif, 'Fjalla One', sans-serif;
     background-color: #E3E2DF;
     height: 100vh;
 }
@@ -12,4 +12,10 @@ body{
 
 .home-container{
     margin-top: 30px;
+}
+
+.jumbotron{
+    margin-top: 200px;
+    text-align: center;
+    font-family: 'Fjalla One', sans-serif;
 }

@@ -25,6 +25,16 @@ def get_workspaces():
     return render_template("workspaces.html", workspaces=mongo.db.workspaces.find())
 
 
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('error_pages/404.html', error=error)
+
+
+@app.errorhandler(500)
+def error_500(error):
+    return render_template('error_pages/500.html', error=error)
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=int(os.environ.get('PORT')),
