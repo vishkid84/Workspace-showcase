@@ -19,3 +19,19 @@ body{
     text-align: center;
     font-family: 'Fjalla One', sans-serif;
 }
+
+.btn{
+    background: #9A1750;
+    border-radius: 0;
+    border-color: #9A1750;
+}
+
+.btn:hover {
+    color: #fff;
+    background-color: #5D001E;
+    border-color: #5D001E;
+}
+
+.form-control{
+    border-radius: 0;
+}

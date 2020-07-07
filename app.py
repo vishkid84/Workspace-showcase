@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId 
 
@@ -23,6 +23,16 @@ def home():
 @app.route('/get_workspaces')
 def get_workspaces():
     return render_template("workspaces.html", workspaces=mongo.db.workspaces.find())
+
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    return render_template('login.html')
 
 
 @app.errorhandler(404)
