@@ -10,8 +10,8 @@ body{
     background: #5D001E !important;
 }
 
-.home-container{
-    margin-top: 30px;
+.home-container, .workspaces-container, .add-workspace-container{
+    margin-top: 70px;
 }
 
 .jumbotron{
@@ -34,4 +34,43 @@ body{
 
 .form-control{
     border-radius: 0;
+}
+
+.card, .card-img, .card-img-top{
+    border-radius: 0;
+}
+
+.card{
+    margin-bottom: 10px;
+}
+
+.title-color{
+    color: #9A1750;
+    font-family: 'Fjalla One', sans-serif;
+}
+
+li i{
+    font-size: xx-large;
+    margin-bottom: 10px;
+    color: #9A1750;
+}
+
+.card-img-top {
+    max-height: 200px;
+    min-height: 150px;
+    object-fit: cover;
+}
+
+.workspace_comments{
+    display: none;
+}
+
+.comments_icon:hover{
+    cursor: pointer;
+}
+
+footer{
+    margin-top: 40px;
+    height: 40px;
+    /* background: red; */
 }

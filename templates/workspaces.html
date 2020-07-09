@@ -2,12 +2,34 @@
 
 {% block content %}
 
-    {% for workspace in workspaces %}
+    
+    <div class="container workspaces-container">
+        <div class="row">
+            {% for workspace in workspaces %}
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top img-fluid" src="{{workspace.image}}" alt="">
+                    <ul class="list-group list-group-flush card-body">
+                        <li class="list-group-item">Workspace: <span class="title-color">{{workspace.workspace_room}}</span> </li>
+                        <li class="list-group-item">Workspace Rating: <span class="title-color">{{workspace.workspace_rating}}</span></li>
+                        <li class="list-group-item">Workspace Preference: <span class="title-color">{{workspace.workspace_preference}}</span> </li>
+                        <li class="list-group-item">Happiness Index: <span class="title-color">{{workspace.happiness_index}}</li>
+                        <li class="list-group-item"><i class="fa fa-comments comments_icon" aria-hidden="true"></i><br><span class="workspace_comments">{{workspace.comments}}</span> </li>
+                    </ul>
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    
+    <!-- {% for workspace in workspaces %}
         {{workspace.workspace_room}}
         {{workspace.workspace_rating}}
         {{workspace.workspace_preference}}
         {{workspace.happiness_index}}
         {{workspace.Comments}}
-    {% endfor %}
+    {% endfor %} -->
 
 {% endblock %}

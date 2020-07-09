@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container add-workspace-container">
+        <div class="row">
+            <form class="col" method="POST" action="{{url_for('insert_workspaces')}}">
+
+                <div class="form-group">
+                <label for="sel1">Select your workspace area:</label>
+                <select class="form-control" id="workspace_room" name="workspace_room" required>
+                    <option disabled selected value="">Choose...</option>
+                    <option value="Balcony">Balcony</option>
+                    <option value="Bedroom">Bedroom</option>
+                    <option value="Kitchen">Kitchen</option>
+                    <option value="Living room">Living room</option>
+                    <option value="Office room">Office room</option>
+                    <option value="Outdoors">Outdoors</option>
+                    <option value="Others">Others</option>
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label for="sel1">How would you rate your workspace?</label>
+                <select class="form-control" id="workspace_rating" name="workspace_rating" required>
+                    <option disabled selected value="">Choose...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label for="sel1">Would you prefer remote working or office?</label>
+                <select class="form-control" id="workspace_preference" name="workspace_preference" required>
+                    <option disabled selected value="">Choose...</option>
+                    <option value="Remote working">Remote working</option>
+                    <option value="Office space">Office space</option>
+                    <option value="Bit of both">Bit of both</option>
+                </select>
+                </div>
+
+                <div class="form-group">
+                <label for="sel1">How happy or stressed are you working away from office?</label>
+                <select class="form-control" id="happiness_index" name="happiness_index" required>
+                    <option disabled selected value="">Choose...</option>
+                    <option value="Very happy">Very happy</option>
+                    <option value="Happy">Happy</option>
+                    <option value="Stressed">Stressed</option>
+                    <option value="Very stressed">Very stressed</option>
+                </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Enter the image url</label>
+                    <input type="text" class="form-control" id="image" name="image" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="comments">Comment:</label>
+                    <textarea class="form-control" rows="5" id="comments" name="comments"></textarea>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-2 offset-md-5">
+                        <button type="submit" name="submit" class="btn btn-danger mt-3 text-center">Submit</button>
+                    </div>
+                </div>
+                
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

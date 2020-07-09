@@ -25,6 +25,17 @@ def get_workspaces():
     return render_template("workspaces.html", workspaces=mongo.db.workspaces.find())
 
 
+@app.route('/add_workspaces')
+def add_workspaces():
+    return render_template('addworkspaces.html')
+
+@app.route('/insert_workspaces', methods=['GET', 'POST'])
+def insert_workspaces():
+    workspaces = mongo.db.workspaces
+    workspaces.insert_one(request.form.to_dict())
+    return redirect(url_for('get_workspaces'))
+
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     return render_template('register.html')
