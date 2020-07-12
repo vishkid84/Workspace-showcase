@@ -4,14 +4,18 @@
 
     <div class="container add-workspace-container">
         <div class="row">
-            <form class="col" method="POST" action="{{url_for('insert_workspaces')}}">
+            <form class="col" method="POST" action="{{url_for('update_workspaces', workspace_id=workspace._id)}}">
 
                 <div class="form-group">
                 <label for="sel1">Select your workspace area:</label>
                 <select class="form-control" id="workspace_room" name="workspace_room" required>
                     <option disabled selected value="">Choose...</option>
                     {% for room in rooms %}
-                    <option value="{{room.workspace_room}}">{{room.workspace_room}}</option>
+                        {% if room.workspace_room == workspace.workspace_room %}
+                        <option value="{{room.workspace_room}}" selected>{{room.workspace_room}}</option>
+                        {% else %}
+                        <option value="{{room.workspace_room}}" >{{room.workspace_room}}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 </div>
@@ -21,7 +25,11 @@
                 <select class="form-control" id="workspace_rating" name="workspace_rating" required>
                     <option disabled selected value="">Choose...</option>
                     {% for rating in ratings %}
-                    <option value="{{rating.workspace_rating}}">{{rating.workspace_rating}}</option>
+                        {% if rating.workspace_rating == workspace.workspace_rating %}
+                        <option value="{{rating.workspace_rating}}" selected>{{rating.workspace_rating}}</option>
+                        {% else %}
+                        <option value="{{rating.workspace_rating}}">{{rating.workspace_rating}}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 </div>
@@ -31,7 +39,11 @@
                 <select class="form-control" id="workspace_preference" name="workspace_preference" required>
                     <option disabled selected value="">Choose...</option>
                     {% for preference in preferences %}
-                    <option value="{{preference.workspace_preference}}">{{preference.workspace_preference}}</option>
+                        {% if preference.workspace_preference == workspace.workspace_preference %}
+                        <option value="{{preference.workspace_preference}}" selected>{{preference.workspace_preference}}</option>
+                        {% else %}
+                        <option value="{{preference.workspace_preference}}" >{{preference.workspace_preference}}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 </div>
@@ -41,19 +53,23 @@
                 <select class="form-control" id="happiness_index" name="happiness_index" required>
                     <option disabled selected value="">Choose...</option>
                     {% for index in indexes %}
-                    <option value="{{index.happiness_index}}">{{index.happiness_index}}</option>
+                        {% if index.happiness_index == workspace.happiness_index %}
+                        <option value="{{index.happiness_index}}" selected>{{index.happiness_index}}</option>
+                        {% else %}
+                        <option value="{{index.happiness_index}}" >{{index.happiness_index}}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 </div>
 
                 <div class="form-group">
                     <label for="image">Enter the image url</label>
-                    <textarea type="text" class="form-control" id="image" name="image" required></textarea>
+                    <textarea type="text" class="form-control" id="image" name="image" required>{{workspace.image}}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="comments">Comment:</label>
-                    <textarea class="form-control" rows="5" id="comments" name="comments"></textarea>
+                    <textarea class="form-control" rows="5" id="comments" name="comments">{{workspace.comments}}</textarea>
                 </div>
                 
                 <div class="row">

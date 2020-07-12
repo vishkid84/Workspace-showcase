@@ -27,13 +27,37 @@ def get_workspaces():
 
 @app.route('/add_workspaces')
 def add_workspaces():
-    return render_template('addworkspaces.html')
+    return render_template('addworkspaces.html', rooms=mongo.db.rooms.find(), ratings=mongo.db.ratings.find(),
+                            preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find())
 
-@app.route('/insert_workspaces', methods=['GET', 'POST'])
+@app.route('/insert_workspaces', methods=['POST'])
 def insert_workspaces():
     workspaces = mongo.db.workspaces
     workspaces.insert_one(request.form.to_dict())
     return redirect(url_for('get_workspaces'))
+
+
+@app.route('/edit_workspaces/<workspace_id>')
+def edit_workspaces(workspace_id):
+    current_workspace = mongo.db.workspaces.find_one({'_id': ObjectId(workspace_id)})
+    return render_template('editworkspaces.html', workspace=current_workspace, rooms=mongo.db.rooms.find(), 
+                            ratings=mongo.db.ratings.find(), preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find())
+
+
+@app.route('/update_workspaces/<workspace_id>', methods=['POST'])
+def update_workspaces(workspace_id):
+    workspaces = mongo.db.workspaces
+    workspaces.update({'_id': ObjectId(workspace_id)},
+    {
+        'workspace_room': request.form.get('workspace_room'),
+        'workspace_rating': request.form.get('workspace_rating'),
+        'workspace_preference': request.form.get('workspace_preference'),
+        'happiness_index': request.form.get('happiness_index'),
+        'image': request.form.get('image'),
+        'comments': request.form.get('comments'),
+    })
+    return redirect(url_for('get_workspaces'))
+    
 
 
 @app.route('/register', methods=['POST', 'GET'])

@@ -20,10 +20,20 @@ body{
     font-family: 'Fjalla One', sans-serif;
 }
 
-.btn{
+.btn-danger{
     background: #9A1750;
     border-radius: 0;
     border-color: #9A1750;
+}
+
+.edit-del-btns{
+    display: inline-flex;
+}
+
+.delete-btn{
+    background: #EE4C7C;
+    border-radius: 0;
+    border-color: #EE4C7C;
 }
 
 .btn:hover {
@@ -57,7 +67,7 @@ li i{
 
 .card-img-top {
     max-height: 200px;
-    min-height: 150px;
+    min-height: 200px;
     object-fit: cover;
 }
 
