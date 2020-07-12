@@ -22,7 +22,7 @@ def home():
 
 @app.route('/get_workspaces')
 def get_workspaces():
-    return render_template("workspaces.html", workspaces=mongo.db.workspaces.find())
+    return render_template("workspaces.html", workspaces=mongo.db.workspaces.find().sort("_id", -1))
 
 
 @app.route('/add_workspaces')
@@ -57,7 +57,12 @@ def update_workspaces(workspace_id):
         'comments': request.form.get('comments'),
     })
     return redirect(url_for('get_workspaces'))
-    
+
+
+@app.route('/delete_workspaces/<workspace_id>')
+def delete_workspaces(workspace_id):
+    mongo.db.workspaces.remove({'_id': ObjectId(workspace_id)})
+    return redirect(url_for('get_workspaces'))
 
 
 @app.route('/register', methods=['POST', 'GET'])
