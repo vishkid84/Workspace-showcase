@@ -28,10 +28,52 @@ def get_workspaces():
     return render_template("workspaces.html", workspaces=mongo.db.workspaces.find().sort("_id", -1))
 
 
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        users = mongo.db.users
+        existing_user = users.find_one({'name': request.form['username']})
+
+        if existing_user is None:
+            hashpass = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
+            users.insert({'name': request.form['username'], 'password': hashpass})
+            session['username'] = request.form['username']
+            session['logged_in'] = True
+            flash('Hello ' + session['username'] + ', you have been successfully registered and logged in', 'success')
+            return redirect(url_for('get_workspaces'))
+
+        else:
+            flash('This username is already in use', 'warning')
+
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method =='POST':
+        users = mongo.db.users
+        login_user = users.find_one({'name': request.form['username']})
+
+        if login_user:
+            if bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
+                session['username'] = login_user['name']
+                flash('Hello ' + session['username'] + ', you have been logged in', 'success')
+                return redirect(url_for('get_workspaces'))
+
+        else:
+            flash('Invalid username or password', 'danger')
+
+    return render_template('login.html')
+
+
 @app.route('/add_workspaces')
 def add_workspaces():
+    if 'username' not in session:
+        flash('You need to be logged in to add workspace', 'warning')
+        return redirect(url_for('login'))
     return render_template('addworkspaces.html', rooms=mongo.db.rooms.find(), ratings=mongo.db.ratings.find(),
                             preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find())
+
 
 @app.route('/insert_workspaces', methods=['POST'])
 def insert_workspaces():
@@ -68,49 +110,10 @@ def delete_workspaces(workspace_id):
     return redirect(url_for('get_workspaces'))
 
 
-@app.route('/register', methods=['POST', 'GET'])
-def register():
-    if request.method == 'POST':
-        users = mongo.db.users
-        existing_user = users.find_one({'name': request.form['username']})
-
-        if existing_user is None:
-            hashpass = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-            users.insert({'name': request.form['username'], 'password': hashpass})
-            session['username'] = request.form['username']
-            session['logged_in'] = True
-            flash('Hello ' + session['username'] + ', you have been successfully registered and logged in', 'success')
-            return redirect(url_for('get_workspaces'))
-
-        else:
-            flash('This username is already in use', 'warning')
-
-    return render_template('register.html')
-
-
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-    if request.method =='POST':
-        users = mongo.db.users
-        login_user = users.find_one({'name': request.form['username']})
-
-        if login_user:
-            if bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
-                session['username'] = request.form['username']
-                flash('Hello ' + session['username'] + ', you have been logged in', 'success')
-                return redirect(url_for('get_workspaces'))
-
-        else:
-            flash('Invalid username or password', 'danger')
-
-    return render_template('login.html')
-
-
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
-   session['logged_in'] = False
    flash('You have been logged out', 'warning')
    return redirect(url_for('get_workspaces'))
 
