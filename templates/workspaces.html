@@ -16,16 +16,13 @@
                         <li class="list-group-item">Happiness Index: <span class="title-color">{{workspace.happiness_index}}</li>
                         <li class="list-group-item"><i class="fa fa-comments comments_icon" aria-hidden="true"></i><br><span class="workspace_comments">{{workspace.comments}}</span> </li>
                     </ul>
-                    
                 </div>
                 <div class="row">
-                        <div class="col-md-2 edit-del-btns">
-                            <a name="edit" class="btn btn-danger mb-5 text-center edit-btn" href="{{url_for('edit_workspaces', workspace_id=workspace._id)}}" >Edit</a>
-                            <a name="edit" class="btn btn-dark mb-5 ml-3 text-center delete-btn" href="{{url_for('delete_workspaces', workspace_id=workspace._id)}}" >Delete</a>
-                        </div>
+                    <div class="col-md-2 edit-del-btns">
+                        <a name="edit" class="btn btn-danger mb-5 text-center edit-btn" href="{{url_for('edit_workspaces', workspace_id=workspace._id)}}" >Edit</a>
+                        <a name="edit" class="btn btn-dark mb-5 ml-3 text-center delete-btn" href="{{url_for('delete_workspaces', workspace_id=workspace._id)}}" >Delete</a>
                     </div>
-                
-                
+                </div>
             </div>
             {% endfor %}
         </div>

@@ -1,19 +1,22 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, session
+from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId 
+import bcrypt
 
 from os import path  
 if path.exists("env.py"):      
      import env 
 
+
+
 app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = 'workspace_database'
 app.config["MONGO_URI"] = os.getenv('MONGO_URI', 'mongodb://localhost')
+app.config["SECRET_KEY"] = os.urandom(24)
 
 mongo = PyMongo(app)
-
 
 @app.route('/')
 def home():
@@ -67,12 +70,49 @@ def delete_workspaces(workspace_id):
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    if request.method == 'POST':
+        users = mongo.db.users
+        existing_user = users.find_one({'name': request.form['username']})
+
+        if existing_user is None:
+            hashpass = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
+            users.insert({'name': request.form['username'], 'password': hashpass})
+            session['username'] = request.form['username']
+            session['logged_in'] = True
+            flash('Hello ' + session['username'] + ', you have been successfully registered and logged in', 'success')
+            return redirect(url_for('get_workspaces'))
+
+        else:
+            flash('This username is already in use', 'warning')
+
     return render_template('register.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    if request.method =='POST':
+        users = mongo.db.users
+        login_user = users.find_one({'name': request.form['username']})
+
+        if login_user:
+            if bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
+                session['username'] = request.form['username']
+                flash('Hello ' + session['username'] + ', you have been logged in', 'success')
+                return redirect(url_for('get_workspaces'))
+
+        else:
+            flash('Invalid username or password', 'danger')
+
     return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   session['logged_in'] = False
+   flash('You have been logged out', 'warning')
+   return redirect(url_for('get_workspaces'))
 
 
 @app.errorhandler(404)
