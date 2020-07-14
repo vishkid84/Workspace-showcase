@@ -10,8 +10,23 @@ body{
     background: #5D001E !important;
 }
 
-.home-container, .workspaces-container, .add-workspace-container{
-    margin-top: 70px;
+.home-container{
+    position: relative;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.workspaces-container, .add-workspace-container{
+    margin-top: 50px;
+}
+
+.home-container .btn{
+    min-width: 200px;
+}
+
+.workspace-heading{
+    color: #9A1750;
+    font-family: 'Fjalla One', sans-serif;
 }
 
 .jumbotron{
@@ -77,6 +92,10 @@ li i{
 
 .comments_icon:hover{
     cursor: pointer;
+}
+
+.flash-message{
+    margin-top: 20px;
 }
 
 footer{

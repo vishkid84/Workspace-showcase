@@ -7,6 +7,12 @@
             <form class="col" method="POST" action="{{url_for('insert_workspaces')}}">
 
                 <div class="form-group">
+                    <label class="sr-only" for="username"></label>
+                    <input type="text" class="form-control sr-only" id="username" value="{{session_username}}"
+                        name="username">
+                </div>
+
+                <div class="form-group">
                 <label for="sel1">Select your workspace area:</label>
                 <select class="form-control" id="workspace_room" name="workspace_room" required>
                     <option disabled selected value="">Choose...</option>
@@ -61,8 +67,6 @@
                         <button type="submit" name="submit" class="btn btn-danger mt-3 text-center">Submit</button>
                     </div>
                 </div>
-                
-
             </form>
         </div>
     </div>

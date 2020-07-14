@@ -35,25 +35,25 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{url_for('get_workspaces')}}">Workspaces</a>
 					</li>
+                    {% if session['logged_in'] == True  %}
                     <li class="nav-item">
 						<a class="nav-link" href="{{url_for('add_workspaces')}}">Add Workspaces</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('register')}}">Register</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('login')}}">Login</a>
 					</li>
                     <li class="nav-item">
 						<a class="nav-link" href="{{url_for('logout')}}">Logout</a>
 					</li>
+                    {% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{url_for('login')}}">Login</a>
+					</li>
+                    {% endif %}
 				</ul>
 			</div>
 		</div>
 	</nav>
 
     <!--  -->
-    <div class="container" style="min-height:100% width:80%">
+    <div class="container flash-message" style="min-height:100% width:80%">
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	  {% if messages %}
 	    {% for category, message in messages %}

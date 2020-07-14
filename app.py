@@ -58,6 +58,7 @@ def login():
             if bcrypt.checkpw(request.form['password'].encode('utf-8'), login_user['password']):
                 session['username'] = login_user['name']
                 flash('Hello ' + session['username'] + ', you have been logged in', 'success')
+                session['logged_in'] = True
                 return redirect(url_for('get_workspaces'))
 
         else:
@@ -72,14 +73,21 @@ def add_workspaces():
         flash('You need to be logged in to add workspace', 'warning')
         return redirect(url_for('login'))
     return render_template('addworkspaces.html', rooms=mongo.db.rooms.find(), ratings=mongo.db.ratings.find(),
-                            preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find())
+                            preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find(), session_username=session['username'])
 
 
 @app.route('/insert_workspaces', methods=['POST'])
 def insert_workspaces():
-    workspaces = mongo.db.workspaces
-    workspaces.insert_one(request.form.to_dict())
-    return redirect(url_for('get_workspaces'))
+    if 'username' in session:
+        if request.method == 'POST':
+            workspaces = mongo.db.workspaces
+            workspaces.insert(request.form.to_dict())
+            flash('You have added a new workspace', 'success')
+            return redirect(url_for('get_workspaces'))
+        return render_template('addworkspaces.html', session_username=session['username'], rooms=mongo.db.rooms.find(), ratings=mongo.db.ratings.find(),
+                                preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find())
+    flash('You need to be logged in to add workspace', 'warning')
+    return redirect(url_for('login'))
 
 
 @app.route('/edit_workspaces/<workspace_id>')
@@ -99,7 +107,7 @@ def update_workspaces(workspace_id):
         'workspace_preference': request.form.get('workspace_preference'),
         'happiness_index': request.form.get('happiness_index'),
         'image': request.form.get('image'),
-        'comments': request.form.get('comments'),
+        'comments': request.form.get('comments')
     })
     return redirect(url_for('get_workspaces'))
 
@@ -115,6 +123,7 @@ def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
    flash('You have been logged out', 'warning')
+   session['logged_in'] = False
    return redirect(url_for('get_workspaces'))
 
 
