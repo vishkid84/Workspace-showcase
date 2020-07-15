@@ -2,15 +2,17 @@
 
 {% block content %}
 
-    
+    <div class="container profile-intro">
+        <div class="row"></div>
+            <div class="col">
+                <h3 class="text-center mb-4 workspace-heading" >Welcome to your workspaces page</h3>
+                <p class="text-center">You can see all the workspaces you have added. If you have more workspaces to add or if you have any in your mind that you think you would like to have as your workspace, you can add them here. You can edit them as needed or delete if you dont want to showcase them anymore. </p>
+            </div>
+    </div>
+    <hr>
     <div class="container workspaces-container">
         <div class="row">
             {% for workspace in workspaces %}
-            <div class="form-group">
-                <label class="sr-only" for="username"></label>
-                <input type="text" class="form-control sr-only" id="username" value="{{session_username}}"
-                    name="username">
-            </div>
             <div class="col-md-6 col-lg-4">
                 <div class="card">
                     <img class="card-img-top img-fluid" src="{{workspace.image}}" alt="">
@@ -33,13 +35,4 @@
         </div>
     </div>
     
-    
-    <!-- {% for workspace in workspaces %}
-        {{workspace.workspace_room}}
-        {{workspace.workspace_rating}}
-        {{workspace.workspace_preference}}
-        {{workspace.happiness_index}}
-        {{workspace.Comments}}
-    {% endfor %} -->
-
 {% endblock %}

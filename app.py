@@ -59,7 +59,7 @@ def login():
                 session['username'] = login_user['name']
                 flash('Hello ' + session['username'] + ', you have been logged in', 'success')
                 session['logged_in'] = True
-                return redirect(url_for('get_workspaces'))
+                return redirect(url_for('profile'))
 
         else:
             flash('Invalid username or password', 'danger')
@@ -84,38 +84,86 @@ def insert_workspaces():
             workspaces.insert(request.form.to_dict())
             flash('You have added a new workspace', 'success')
             return redirect(url_for('get_workspaces'))
-        return render_template('addworkspaces.html', session_username=session['username'], rooms=mongo.db.rooms.find(), ratings=mongo.db.ratings.find(),
-                                preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find())
+        return render_template('addworkspaces.html', rooms=mongo.db.rooms.find(), ratings=mongo.db.ratings.find(),
+                                preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find(), 
+                                session_username=session['username'])
     flash('You need to be logged in to add workspace', 'warning')
     return redirect(url_for('login'))
 
 
 @app.route('/edit_workspaces/<workspace_id>')
 def edit_workspaces(workspace_id):
-    current_workspace = mongo.db.workspaces.find_one({'_id': ObjectId(workspace_id)})
-    return render_template('editworkspaces.html', workspace=current_workspace, rooms=mongo.db.rooms.find(), 
-                            ratings=mongo.db.ratings.find(), preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find())
+    '''
+    Check if user is logged in:
+      Get the workspace by id.
+      Check if username in session is the same as the username in the workspace:
+         Return editworkspaces page
+      else redirect to login page
+    If user not logged in, redirect to login page
+    '''
+    if 'username'  in session:
+        current_workspace = mongo.db.workspaces.find_one({'_id': ObjectId(workspace_id)})
+        if session['username'] == current_workspace['username']:
+            current_workspace = mongo.db.workspaces.find_one({'_id': ObjectId(workspace_id)})
+            return render_template('editworkspaces.html', workspace=current_workspace, rooms=mongo.db.rooms.find(), 
+                                    ratings=mongo.db.ratings.find(), preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find(), 
+                                    session_username=session['username'])
+        flash('You need to be logged in to edit a workspace', 'danger')
+        return redirect(url_for('login'))
+    flash('You need to be logged in to edit a workspace', 'danger')
+    return redirect(url_for('login'))
 
 
 @app.route('/update_workspaces/<workspace_id>', methods=['POST'])
 def update_workspaces(workspace_id):
-    workspaces = mongo.db.workspaces
-    workspaces.update({'_id': ObjectId(workspace_id)},
-    {
-        'workspace_room': request.form.get('workspace_room'),
-        'workspace_rating': request.form.get('workspace_rating'),
-        'workspace_preference': request.form.get('workspace_preference'),
-        'happiness_index': request.form.get('happiness_index'),
-        'image': request.form.get('image'),
-        'comments': request.form.get('comments')
-    })
-    return redirect(url_for('get_workspaces'))
+    '''
+    Check if user is logged:
+      If yes, check if method is POST:
+          If yes, get the workspace by id, update the workspace and redirect to workspaces page
+          If no, return to editworkspaces page
+    If not logged in, redirect to login page
+    '''
+    if 'username' in session:
+        if request.method == 'POST':
+            workspaces = mongo.db.workspaces
+            workspaces.update({'_id': ObjectId(workspace_id)},
+            {
+                'workspace_room': request.form.get('workspace_room'),
+                'workspace_rating': request.form.get('workspace_rating'),
+                'workspace_preference': request.form.get('workspace_preference'),
+                'happiness_index': request.form.get('happiness_index'),
+                'image': request.form.get('image'),
+                'comments': request.form.get('comments'),
+                'username': session['username']
+            })
+            return redirect(url_for('get_workspaces'))
+        return render_template('editworkspaces.html', workspace=current_workspace, rooms=mongo.db.rooms.find(), 
+                                ratings=mongo.db.ratings.find(), preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find(), 
+                                session_username=session['username'])
+    flash('You need to be logged in to edit workspace', 'warning')
+    return redirect(url_for('login'))
 
 
 @app.route('/delete_workspaces/<workspace_id>')
 def delete_workspaces(workspace_id):
-    mongo.db.workspaces.remove({'_id': ObjectId(workspace_id)})
-    return redirect(url_for('get_workspaces'))
+    if 'username' in session:
+        current_workspace = mongo.db.workspaces.find_one({'_id': ObjectId(workspace_id)})
+        if session['username'] == current_workspace['username']: 
+            mongo.db.workspaces.remove({'_id': ObjectId(workspace_id)})
+            return redirect(url_for('profile'))
+        flash('You need to be logged in to edit a workspace', 'danger')
+        return redirect(url_for('login'))
+    flash('You need to be logged in to edit a workspace', 'danger')
+    return redirect(url_for('login'))
+
+
+@app.route('/profile')
+def profile():
+    if 'username' not in session:
+        flash('You need to be logged in to add workspace', 'warning')
+        return redirect(url_for('login'))
+    return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("_id", -1), 
+    session_username=session['username'])
 
 
 @app.route('/logout')
