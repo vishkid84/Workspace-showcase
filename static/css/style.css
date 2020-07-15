@@ -41,6 +41,10 @@ body{
     border-color: #9A1750;
 }
 
+.btn-dark{
+    border-radius: 0;
+}
+
 .edit-del-btns{
     display: inline-flex;
 }

@@ -27,10 +27,30 @@
                 <div class="row">
                     <div class="col-md-2 edit-del-btns">
                         <a name="edit" class="btn btn-danger mb-5 text-center edit-btn" href="{{url_for('edit_workspaces', workspace_id=workspace._id)}}" >Edit</a>
-                        <a name="edit" class="btn btn-dark mb-5 ml-3 text-center delete-btn" href="{{url_for('delete_workspaces', workspace_id=workspace._id)}}" >Delete</a>
+                        <button name="delete" class="btn btn-dark mb-5 ml-3 text-center delete-btn"data-toggle="modal" data-target="#myModal"> Delete</button>
                     </div>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <p>Are you sure you want to delete the workspace?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark mb-5 ml-3 text-center edit-btn" data-dismiss="modal">Cancel</button>
+                        <a name="delete" class="btn btn-dark mb-5 ml-3 text-center delete-btn" href="{{url_for('delete_workspaces', workspace_id=workspace._id)}}" >Delete</a>
+                    </div>
+                </div>
+                
+                </div>
+            </div>
+
             {% endfor %}
         </div>
     </div>
