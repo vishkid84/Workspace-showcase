@@ -30,24 +30,24 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
-						<a class="nav-link active" href="{{url_for('home')}}">Home</a>
+						<a  {% if request.endpoint == 'home' %} class="active nav-link" {% endif %} class="nav-link" href="{{url_for('home')}}">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('get_workspaces')}}">Workspaces</a>
+						<a {% if request.endpoint == 'get_workspaces' %} class="active nav-link" {% endif %} class="nav-link" href="{{url_for('get_workspaces')}}">Workspaces</a>
 					</li>
                     <li class="nav-item">
-						<a class="nav-link" href="{{url_for('add_workspaces')}}">Add Workspaces</a>
+						<a {% if request.endpoint == 'add_workspaces' %} class="active nav-link" {% endif %} class="nav-link" href="{{url_for('add_workspaces')}}">Add Workspaces</a>
 					</li>
                     {% if session['logged_in'] == True  %}
                     <li class="nav-item">
-						<a class="nav-link" href="{{url_for('profile')}}">My Profile</a>
+						<a {% if request.endpoint == 'profile' %} class="active nav-link" {% endif %} class="nav-link" href="{{url_for('profile')}}">My Profile</a>
 					</li>
                     <li class="nav-item">
-						<a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+						<a {% if request.endpoint == 'logout' %} class="active nav-link" {% endif %} class="nav-link" href="{{url_for('logout')}}">Logout</a>
 					</li>
                     {% else %}
 					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('login')}}">Login</a>
+						<a {% if request.endpoint == 'login' %} class="active nav-link" {% endif %} class="nav-link" href="{{url_for('login')}}">Login</a>
 					</li>
                     {% endif %}
 				</ul>
