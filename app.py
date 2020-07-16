@@ -2,6 +2,8 @@ import os
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId 
+from flask_paginate import Pagination, get_page_args
+import math
 import bcrypt
 
 from os import path  
@@ -18,6 +20,9 @@ app.config["SECRET_KEY"] = os.urandom(24)
 
 mongo = PyMongo(app)
 
+# Number of workspaces to be displayed per page
+page_limit = 3
+
 @app.route('/')
 def home():
     return render_template("home.html")
@@ -25,7 +30,19 @@ def home():
 
 @app.route('/get_workspaces')
 def get_workspaces():
-    return render_template("workspaces.html", workspaces=mongo.db.workspaces.find().sort("_id", -1))
+    # get current page for pagination
+    current_page = int(request.args.get('current_page', 1))
+    # get total of all the workspaces in db
+    total = mongo.db.workspaces.count({})
+    # Add current_position of the current page set at 0 
+    current_position = int(request.args.get('current_position', 0))
+    # Show the maximum number of pages
+    max_pages = int(math.ceil(total / page_limit))
+    
+    workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
+    return render_template("workspaces.html", 
+            workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
+            current_position=current_position, max_pages=max_pages)
 
 
 @app.route('/register', methods=['POST', 'GET'])

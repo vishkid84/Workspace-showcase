@@ -105,5 +105,33 @@ li i{
 footer{
     margin-top: 40px;
     height: 40px;
-    /* background: red; */
+}
+
+.pagination-page-info {
+    padding: .6em;
+    padding-left: 0;
+    width: 40em;
+    margin: .5em;
+    margin-left: 0;
+    font-size: 12px;
+}
+.pagination-page-info b {
+    color: black;
+    background: #6aa6ed;
+    padding-left: 2px;
+    padding: .1em .25em;
+    font-size: 150%;
+}
+
+.page-link{
+    color: #9A1750;
+    font-family: 'Fjalla One', sans-serif;
+}
+
+.page-link:hover{
+    color: #5D001E !important;
+    z-index: 2;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
 }
