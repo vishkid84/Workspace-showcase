@@ -2,7 +2,25 @@
 
 {% block content %}
 
-    
+
+    <div class="container sort-container">
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <form action="">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sort by Worskpace Rating
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{url_for('sort_ascending')}}" >Ascending</a>
+                            <a class="dropdown-item" href="{{url_for('sort_descending')}}">Descending</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="container workspaces-container">
         <div class="row">
             {% for workspace in workspaces %}
@@ -22,12 +40,6 @@
                         <li class="list-group-item"><i class="fa fa-comments comments_icon" aria-hidden="true"></i><br><span class="workspace_comments">{{workspace.comments}}</span> </li>
                     </ul>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-md-2 edit-del-btns">
-                        <a name="edit" class="btn btn-danger mb-5 text-center edit-btn" href="{{url_for('edit_workspaces', workspace_id=workspace._id)}}" >Edit</a>
-                        <a name="edit" class="btn btn-dark mb-5 ml-3 text-center delete-btn" href="{{url_for('delete_workspaces', workspace_id=workspace._id)}}" >Delete</a>
-                    </div>
-                </div> -->
             </div>
             {% endfor %}
         </div>

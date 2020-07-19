@@ -135,3 +135,7 @@ footer{
     background-color: #e9ecef;
     border-color: #dee2e6;
 }
+
+.sort-container .dropdown-item{
+        font-size: .875rem;
+}

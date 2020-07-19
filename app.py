@@ -42,7 +42,60 @@ def get_workspaces():
     workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
             workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
-            current_position=current_position, max_pages=max_pages)
+            current_position=current_position, max_pages=max_pages, page='get_workspaces')
+
+
+@app.route('/profile')
+def profile():
+    if 'username' not in session:
+        flash('You need to be logged in to add workspace', 'warning')
+        return redirect(url_for('login'))
+    return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("_id", -1), 
+    session_username=session['username'], page='profile')
+
+
+@app.route('/sort_ascending')
+def sort_ascending():
+    # get current page for pagination
+    current_page = int(request.args.get('current_page', 1))
+    # get total of all the workspaces in db
+    total = mongo.db.workspaces.count({})
+    # Add current_position of the current page set at 0 
+    current_position = int(request.args.get('current_position', 0))
+    # Show the maximum number of pages
+    max_pages = int(math.ceil(total / page_limit))
+
+    profile_page = request.args.get('page')
+    if profile_page == 'profile':
+        return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", 1), 
+                session_username=session['username'], page='profile')
+
+    workspaces = mongo.db.workspaces.find().sort("workspace_rating", 1).limit(page_limit).skip(current_position)
+    return render_template("workspaces.html", 
+            workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
+            current_position=current_position, max_pages=max_pages, page='get_workspaces')
+
+
+@app.route('/sort_descending')
+def sort_descending():
+    # get current page for pagination
+    current_page = int(request.args.get('current_page', 1))
+    # get total of all the workspaces in db
+    total = mongo.db.workspaces.count({})
+    # Add current_position of the current page set at 0 
+    current_position = int(request.args.get('current_position', 0))
+    # Show the maximum number of pages
+    max_pages = int(math.ceil(total / page_limit))
+
+    profile_page = request.args.get('page')
+    if profile_page == 'profile':
+        return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", -1), 
+                session_username=session['username'], page='profile')
+    
+    workspaces = mongo.db.workspaces.find().sort("workspace_rating", -1).limit(page_limit).skip(current_position)
+    return render_template("workspaces.html", 
+            workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
+            current_position=current_position, max_pages=max_pages, page='get_workspaces')
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -172,15 +225,6 @@ def delete_workspaces(workspace_id):
         return redirect(url_for('login'))
     flash('You need to be logged in to edit a workspace', 'danger')
     return redirect(url_for('login'))
-
-
-@app.route('/profile')
-def profile():
-    if 'username' not in session:
-        flash('You need to be logged in to add workspace', 'warning')
-        return redirect(url_for('login'))
-    return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("_id", -1), 
-    session_username=session['username'])
 
 
 @app.route('/logout')
