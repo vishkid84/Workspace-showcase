@@ -65,10 +65,20 @@ def sort_ascending():
     # Show the maximum number of pages
     max_pages = int(math.ceil(total / page_limit))
 
+    '''
+    If user is logged in, check if page name is profile.
+        If it is, that means they are in the 'My profile' page. Sort ascending based on workspace rating. 
+    If user is not logged in, redirect to login page
+    If page name is not profile, it means they are in the workspaces page. Sort ascending in that page. 
+    '''
     profile_page = request.args.get('page')
-    if profile_page == 'profile':
-        return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", 1), 
-                session_username=session['username'], page='profile')
+    if 'username' in session:
+        if profile_page == 'profile':
+            return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", 1), 
+                    session_username=session['username'], page='profile')
+    else:
+        flash('You need to be logged in', 'warning')
+        return redirect(url_for('login'))
 
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", 1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
@@ -88,9 +98,13 @@ def sort_descending():
     max_pages = int(math.ceil(total / page_limit))
 
     profile_page = request.args.get('page')
-    if profile_page == 'profile':
-        return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", -1), 
-                session_username=session['username'], page='profile')
+    if 'username' in session:
+        if profile_page == 'profile':
+            return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", -1), 
+                    session_username=session['username'], page='profile')
+    else:
+        flash('You need to be logged in', 'warning')
+        return redirect(url_for('login'))
     
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", -1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
@@ -236,6 +250,11 @@ def logout():
    return redirect(url_for('get_workspaces'))
 
 
+@app.route('/charts')
+def charts():
+    return render_template('charts.html')
+
+
 @app.errorhandler(404)
 def error_404(error):
     return render_template('error_pages/404.html', error=error)
@@ -243,7 +262,7 @@ def error_404(error):
 
 @app.errorhandler(500)
 def error_500(error):
-    return render_template('error_pages/500.html', error=error)
+    return render_template("charts.html")
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ body{
     margin-bottom: 100px;
 }
 
-.workspaces-container, .add-workspace-container{
+.workspaces-container, .add-workspace-container, .charts-container{
     margin-top: 50px;
 }
 
