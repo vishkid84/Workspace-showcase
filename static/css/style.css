@@ -16,7 +16,11 @@ body{
     margin-bottom: 100px;
 }
 
-.workspaces-container, .add-workspace-container, .charts-container{
+.workspaces-container{
+    margin-top: 20px;
+}
+
+.add-workspace-container, .charts-container{
     margin-top: 50px;
 }
 
@@ -41,7 +45,7 @@ body{
     border-color: #9A1750;
 }
 
-.btn-dark{
+.btn{
     border-radius: 0;
 }
 
@@ -138,4 +142,18 @@ footer{
 
 .sort-container .dropdown-item{
         font-size: .875rem;
+}
+
+iframe{
+    margin-bottom: 15px;
+}
+
+#filter-results{
+    font-size: 14px;
+    border-radius: 0;
+}
+
+.filter-btn{
+    font-size: 14px;
+    margin-right: 15px;
 }

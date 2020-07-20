@@ -2,6 +2,31 @@
 
 {% block content %}
 
+    <div class="container filter-container">
+        <div class="row justify-content-end">
+            <form action="{{url_for('filter')}}" method="POST">
+                <div class="form-row align-items-center">
+                    <div class="col-auto mb-2">
+                    <select class="custom-select mr-sm-2" id="filter-results" name="filter_results" aria-label="filter_results">
+                        <option selected disabled>Filter results by:</option>
+                        <optgroup label="Workspace room"> 
+                            <option value="Balcony">Balcony</option>
+                            <option value="Bedroom">Bedroom</option>
+                            <option value="Kitchen">Kitchen</option>
+                            <option value="Living room">Living room</option>
+                            <option value="Office room">Office room</option>
+                            <option value="Outdoors">Outdoors</option>
+                            <option value="Outdoors">Others</option>
+                        </optgroup>
+                    </select>
+                    </div>
+                    <div class="col-auto mb-2">
+                    <button type="submit" class="btn btn-danger text-white filter-btn" >Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="container sort-container">
         <div class="row justify-content-end">
@@ -50,6 +75,7 @@
         <div class="row">
             <div class="col">
                 <div aria-label="Page navigation example">
+                    {% if page != 'filter' %}
                     <ul class="pagination">
                         <!-- If current position of the page is higher than 0, show 'previous' button -->
                         {%if current_position >0 %}
@@ -72,6 +98,7 @@
                         </li>
                         {% endif %}
                     </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>

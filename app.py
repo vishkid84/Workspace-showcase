@@ -21,7 +21,7 @@ app.config["SECRET_KEY"] = os.urandom(24)
 mongo = PyMongo(app)
 
 # Number of workspaces to be displayed per page
-page_limit = 3
+page_limit = 9
 
 @app.route('/')
 def home():
@@ -54,6 +54,28 @@ def profile():
     session_username=session['username'], page='profile')
 
 
+@app.route('/filter', methods=['POST', 'GET'])
+def filter():
+    # get current page for pagination
+    current_page = int(request.args.get('current_page', 1))
+    # get total of all the workspaces in db
+    total = mongo.db.workspaces.count({})
+    # Add current_position of the current page set at 0 
+    current_position = int(request.args.get('current_position', 0))
+    # Show the maximum number of pages
+    max_pages = int(math.ceil(total / page_limit))
+
+    result = request.form.get('filter_results') 
+    if result is None:
+        workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
+        return render_template("workspaces.html", 
+            workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
+            current_position=current_position, max_pages=max_pages, page='get_workspaces')
+    workspaces=mongo.db.workspaces.find({'workspace_room': result}).sort("_id", -1).limit(page_limit).skip(current_position)
+    return render_template('workspaces.html', workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
+            current_position=current_position, max_pages=max_pages, page='filter')
+
+
 @app.route('/sort_ascending')
 def sort_ascending():
     # get current page for pagination
@@ -76,9 +98,9 @@ def sort_ascending():
         if profile_page == 'profile':
             return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", 1), 
                     session_username=session['username'], page='profile')
-    else:
-        flash('You need to be logged in', 'warning')
-        return redirect(url_for('login'))
+        else:
+            flash('You need to be logged in', 'warning')
+            return redirect(url_for('login'))
 
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", 1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
@@ -102,9 +124,9 @@ def sort_descending():
         if profile_page == 'profile':
             return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", -1), 
                     session_username=session['username'], page='profile')
-    else:
-        flash('You need to be logged in', 'warning')
-        return redirect(url_for('login'))
+        else:
+            flash('You need to be logged in', 'warning')
+            return redirect(url_for('login'))
     
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", -1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
