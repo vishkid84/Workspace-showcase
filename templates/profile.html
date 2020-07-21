@@ -38,7 +38,7 @@
                         <li class="list-group-item">Workspace Rating: <span class="title-color">{{workspace.workspace_rating}}</span></li>
                         <li class="list-group-item">Workspace Preference: <span class="title-color">{{workspace.workspace_preference}}</span> </li>
                         <li class="list-group-item">Happiness Index: <span class="title-color">{{workspace.happiness_index}}</li>
-                        <li class="list-group-item"><i class="fa fa-comments comments_icon" aria-hidden="true"></i><br><span class="workspace_comments">{{workspace.comments}}</span> </li>
+                        <li class="list-group-item"><a href="{{url_for('one_workspace', workspace_id=workspace._id)}}"><i class="fa fa-comments comments_icon" aria-hidden="true"></i><br><span class="workspace_comments"></span> </a></li>
                     </ul>
                 </div>
                 <div class="row">

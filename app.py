@@ -73,7 +73,7 @@ def filter():
             current_position=current_position, max_pages=max_pages, page='get_workspaces')
     workspaces=mongo.db.workspaces.find({'workspace_room': result}).sort("_id", -1).limit(page_limit).skip(current_position)
     return render_template('workspaces.html', workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
-            current_position=current_position, max_pages=max_pages, page='filter')
+            current_position=current_position, max_pages=max_pages, page='get_workspaces')
 
 
 @app.route('/sort_ascending')
@@ -98,14 +98,12 @@ def sort_ascending():
         if profile_page == 'profile':
             return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", 1), 
                     session_username=session['username'], page='profile')
-        else:
-            flash('You need to be logged in', 'warning')
-            return redirect(url_for('login'))
 
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", 1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
             workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
             current_position=current_position, max_pages=max_pages, page='get_workspaces')
+
 
 
 @app.route('/sort_descending')
@@ -119,19 +117,22 @@ def sort_descending():
     # Show the maximum number of pages
     max_pages = int(math.ceil(total / page_limit))
 
-    profile_page = request.args.get('page')
+    page = request.args.get('page')
     if 'username' in session:
-        if profile_page == 'profile':
+        if page == 'profile':
             return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", -1), 
                     session_username=session['username'], page='profile')
-        else:
-            flash('You need to be logged in', 'warning')
-            return redirect(url_for('login'))
     
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", -1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
             workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
             current_position=current_position, max_pages=max_pages, page='get_workspaces')
+
+
+@app.route('/one_workspace/<workspace_id>')
+def one_workspace(workspace_id):
+    current_workspace = mongo.db.workspaces.find_one({'_id': ObjectId(workspace_id)})
+    return render_template('oneworkspace.html', workspace=current_workspace)
 
 
 @app.route('/register', methods=['POST', 'GET'])

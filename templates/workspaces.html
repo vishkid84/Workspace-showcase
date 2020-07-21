@@ -31,17 +31,17 @@
     <div class="container sort-container">
         <div class="row justify-content-end">
             <div class="col-auto">
-                <form action="">
+                <div>
                     <div class="btn-group">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Sort by Worskpace Rating
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{url_for('sort_ascending')}}" >Ascending</a>
+                            <a class="dropdown-item" href="{{url_for('sort_ascending' )}}" >Ascending</a>
                             <a class="dropdown-item" href="{{url_for('sort_descending')}}">Descending</a>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
                         <li class="list-group-item">Workspace Rating: <span class="title-color">{{workspace.workspace_rating}}</span></li>
                         <li class="list-group-item">Workspace Preference: <span class="title-color">{{workspace.workspace_preference}}</span> </li>
                         <li class="list-group-item">Happiness Index: <span class="title-color">{{workspace.happiness_index}}</li>
-                        <li class="list-group-item"><i class="fa fa-comments comments_icon" aria-hidden="true"></i><br><span class="workspace_comments">{{workspace.comments}}</span> </li>
+                        <li class="list-group-item"><a href="{{url_for('one_workspace', workspace_id=workspace._id)}}"><i class="fa fa-comments comments_icon" aria-hidden="true"></i><br><span class="workspace_comments"></span> </a></li>
                     </ul>
                 </div>
             </div>

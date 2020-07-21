@@ -107,7 +107,7 @@ li i{
 }
 
 footer{
-    margin-top: 40px;
+    margin-top: 10px;
     height: 40px;
 }
 
@@ -156,4 +156,42 @@ iframe{
 .filter-btn{
     font-size: 14px;
     margin-right: 15px;
+}
+
+.single-card {
+    height: 70vh;
+    top: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 20px;
+    border-radius: 15px;
+}
+
+.single-card-img {
+    min-height: 70vh;
+    max-height: 70vh;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.single-card-img-overlay{
+    background-color: rgb(93, 0, 30, 0.6);
+    border-radius: 15px;
+}
+
+.single-card-img-overlay a{
+    margin: 10px;
+}
+
+.single-card-content{
+    height: 65vh;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.single-card-content .list-group-item{
+    background: none;
+}
+
+.comments{
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 1.1rem;
 }
