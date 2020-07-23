@@ -21,7 +21,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-    <nav id="navbar" class="navbar navbar-expand-md navbar-dark bg-dark">
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
 			<a class="navbar-brand logo" href="{{url_for('home')}}">workspace-showcase</a>
 			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
@@ -29,6 +29,8 @@
             </button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
+                <!-- If  endpoint is the same as page, set class to active to highlight the respective navlink. 
+                For some, end point has to be changed to specify the page as there are other redirects -->
 					<li class="nav-item">
 						<a  {% if request.endpoint == 'home' %} class="active nav-link" {% endif %} class="nav-link" href="{{url_for('home')}}">Home</a>
 					</li>
@@ -58,7 +60,7 @@
 		</div>
 	</nav>
 
-    <!--  -->
+    <!-- Flash messages -->
     <div class="container flash-message" style="min-height:100% width:80%">
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	  {% if messages %}
@@ -80,6 +82,7 @@
         </div>
     </footer>
 
+<!-- Script to go back to the page from oneworkspace.html -->
 <script>
     function goBack() {
     window.history.back()

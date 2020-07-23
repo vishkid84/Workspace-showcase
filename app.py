@@ -47,11 +47,19 @@ def get_workspaces():
 
 @app.route('/profile')
 def profile():
+    '''
+    If user is not logged in, redirect to login page.
+    if user is logged in, find all workspaces added by user.
+    This is done by 'username' key in mongodb and session username. 
+    Return profile.html to take to the My Profile page.
+    '''
+
     if 'username' not in session:
         flash('You need to be logged in to add workspace', 'warning')
         return redirect(url_for('login'))
-    return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("_id", -1), 
-    session_username=session['username'], page='profile')
+    workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("_id", -1)
+    return render_template("profile.html", workspaces=workspaces, 
+            session_username=session['username'], page='profile')
 
 
 @app.route('/filter', methods=['POST', 'GET'])
@@ -65,15 +73,24 @@ def filter():
     # Show the maximum number of pages
     max_pages = int(math.ceil(total / page_limit))
 
-    result = request.form.get('filter_results') 
+    '''
+    Get workspace name from 'filter_results' form, assigned it as variable result.
+    If result is none, return all the workspaces. 
+    Else return all the workspaces where the result is the same as workspace_room in mongodb. Assigned this to a variable named filter
+    '''
+
+    result = request.form.get('filter_results')
+    filter = {'workspace_room': result}
+    
     if result is None:
         workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
         return render_template("workspaces.html", 
-            workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
-            current_position=current_position, max_pages=max_pages, page='get_workspaces')
-    workspaces=mongo.db.workspaces.find({'workspace_room': result}).sort("_id", -1).limit(page_limit).skip(current_position)
+        workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
+        current_position=current_position, max_pages=max_pages, page='get_workspaces')
+
+    workspaces=mongo.db.workspaces.find(filter).sort("_id", -1).limit(page_limit).skip(current_position)
     return render_template('workspaces.html', workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
-            current_position=current_position, max_pages=max_pages, page='get_workspaces')
+    current_position=current_position, max_pages=max_pages, page='filter', result=result)
 
 
 @app.route('/sort_ascending')
@@ -93,17 +110,24 @@ def sort_ascending():
     If user is not logged in, redirect to login page
     If page name is not profile, it means they are in the workspaces page. Sort ascending in that page. 
     '''
-    profile_page = request.args.get('page')
+    page = request.args.get('page')
     if 'username' in session:
-        if profile_page == 'profile':
+        if page == 'profile':
             return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", 1), 
                     session_username=session['username'], page='profile')
+
+    result = request.form.get('filter_results')
+    filter = mongo.db.workspaces.find({'workspace_room': 'Living room'})
+    if page == 'filter':
+        if result == 'Living room':
+            workspaces=filter.sort("workspace_rating", 1).limit(page_limit).skip(current_position)
+            return render_template('workspaces.html', workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
+                    current_position=current_position, max_pages=max_pages, page='filter', result=result,)
 
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", 1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
             workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
             current_position=current_position, max_pages=max_pages, page='get_workspaces')
-
 
 
 @app.route('/sort_descending')
@@ -117,12 +141,20 @@ def sort_descending():
     # Show the maximum number of pages
     max_pages = int(math.ceil(total / page_limit))
 
+    '''
+    If user is logged in, check if page name is profile.
+        If it is, that means they are in the 'My profile' page. Sort descending based on workspace rating. 
+    If user is not logged in, redirect to login page
+    If page name is not profile, it means they are in the workspaces page. Sort descending in that page. 
+    '''
+
     page = request.args.get('page')
     if 'username' in session:
         if page == 'profile':
             return render_template("profile.html", workspaces=mongo.db.workspaces.find({'username': session['username']}).sort("workspace_rating", -1), 
                     session_username=session['username'], page='profile')
-    
+
+
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", -1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html", 
             workspaces=workspaces, current_page=current_page, page_limit=page_limit, total=total,
@@ -137,6 +169,14 @@ def one_workspace(workspace_id):
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    '''
+    Check if method is POST. If not, render template for Register. 
+    If yes, create collection named  users
+    Check if user is exist by using username in form
+        If no existing user, hash password and insert into the users collection and redirect to workspaces page
+        If user exist, return render template for register
+    '''
+
     if request.method == 'POST':
         users = mongo.db.users
         existing_user = users.find_one({'name': request.form['username']})
@@ -150,13 +190,23 @@ def register():
             return redirect(url_for('get_workspaces'))
 
         else:
-            flash('This username is already in use', 'warning')
+            flash('This username is taken, please use another one', 'warning')
+            return render_template('register.html')
 
     return render_template('register.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    '''
+    Check if method is POST. If not, render template for Login. 
+    If yes, create collection named users and another named login_user to find the username from the form
+        If there is login_user, check if password entered is the same as the hashed password in the database,
+        create session username with and login username, set session logged in to True and redirect 
+        to My Profile page with flash logged in message 
+        If there is no login_user, flash message and return render template for Login
+    '''
+
     if request.method =='POST':
         users = mongo.db.users
         login_user = users.find_one({'name': request.form['username']})
@@ -167,9 +217,9 @@ def login():
                 flash('Hello ' + session['username'] + ', you have been logged in', 'success')
                 session['logged_in'] = True
                 return redirect(url_for('profile'))
-
-        else:
-            flash('Invalid username or password', 'danger')
+            else:
+                flash('Invalid username or password', 'danger')
+                return render_template('login.html')
 
     return render_template('login.html')
 
@@ -185,12 +235,18 @@ def add_workspaces():
 
 @app.route('/insert_workspaces', methods=['POST'])
 def insert_workspaces():
+    '''
+    Check if user is logged in. If not redirect to login page
+    If user is logged in, check if method is POST. If not, return to add workspaces page. 
+    If method is post get the workspaces collection. 
+    Insert from form as dict. Show flash message and redirect to profile page. 
+    '''
     if 'username' in session:
         if request.method == 'POST':
             workspaces = mongo.db.workspaces
             workspaces.insert(request.form.to_dict())
             flash('You have added a new workspace', 'success')
-            return redirect(url_for('get_workspaces'))
+            return redirect(url_for('profile'))
         return render_template('addworkspaces.html', rooms=mongo.db.rooms.find(), ratings=mongo.db.ratings.find(),
                                 preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find(), 
                                 session_username=session['username'])
@@ -224,11 +280,11 @@ def edit_workspaces(workspace_id):
 @app.route('/update_workspaces/<workspace_id>', methods=['POST'])
 def update_workspaces(workspace_id):
     '''
-    Check if user is logged:
+    Check if user is logged in:
+    If not logged in, redirect to login page
       If yes, check if method is POST:
           If yes, get the workspace by id, update the workspace and redirect to workspaces page
           If no, return to editworkspaces page
-    If not logged in, redirect to login page
     '''
     if 'username' in session:
         if request.method == 'POST':
@@ -243,7 +299,7 @@ def update_workspaces(workspace_id):
                 'comments': request.form.get('comments'),
                 'username': session['username']
             })
-            return redirect(url_for('get_workspaces'))
+            return redirect(url_for('profile'))
         return render_template('editworkspaces.html', workspace=current_workspace, rooms=mongo.db.rooms.find(), 
                                 ratings=mongo.db.ratings.find(), preferences=mongo.db.preferences.find(), indexes=mongo.db.indexes.find(), 
                                 session_username=session['username'])
@@ -253,6 +309,13 @@ def update_workspaces(workspace_id):
 
 @app.route('/delete_workspaces/<workspace_id>')
 def delete_workspaces(workspace_id):
+    '''
+    Check if user is logged in
+    If not, redirect to login page. 
+    If logged in, create a current_workspace variable to get the workspace by workspace_id.
+    Check if session username is the same as the username in the workspace. 
+        If yes, remove the workspace. If not, redirect to login page
+    '''
     if 'username' in session:
         current_workspace = mongo.db.workspaces.find_one({'_id': ObjectId(workspace_id)})
         if session['username'] == current_workspace['username']: 

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    
     <div class="container filter-container">
         <div class="row justify-content-end">
             <form action="{{url_for('filter')}}" method="POST">
@@ -10,13 +10,14 @@
                     <select class="custom-select mr-sm-2" id="filter-results" name="filter_results" aria-label="filter_results">
                         <option selected disabled>Filter results by:</option>
                         <optgroup label="Workspace room"> 
-                            <option value="Balcony">Balcony</option>
-                            <option value="Bedroom">Bedroom</option>
-                            <option value="Kitchen">Kitchen</option>
-                            <option value="Living room">Living room</option>
-                            <option value="Office room">Office room</option>
-                            <option value="Outdoors">Outdoors</option>
-                            <option value="Outdoors">Others</option>
+                        <!-- If result specified in app.py is the same as value, set that to selected -->
+                            <option value="Balcony" {% if result == 'Balcony' %} selected=selected  {% endif %}>Balcony</option>
+                            <option value="Bedroom" {% if result == 'Bedroom' %} selected=selected {% endif %}>Bedroom</option>
+                            <option value="Kitchen" {% if result == 'Kitchen' %} selected=selected {% endif %}>Kitchen</option>
+                            <option value="Living room" {% if result == 'Living room' %} selected=selected {% endif %}>Living room</option>
+                            <option value="Office room" {% if result == 'Office room' %} selected=selected {% endif %}>Office room</option>
+                            <option value="Outdoors" {% if result == 'Outdoors' %} selected=selected {% endif %}>Outdoors</option>
+                            <option value="Others" {% if result == 'Outdoors' %} selected=selected {% endif %}>Others</option>
                         </optgroup>
                     </select>
                     </div>
@@ -37,7 +38,7 @@
                             Sort by Worskpace Rating
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{url_for('sort_ascending' )}}" >Ascending</a>
+                            <a class="dropdown-item" href="{{url_for('sort_ascending')}}" >Ascending</a>
                             <a class="dropdown-item" href="{{url_for('sort_descending')}}">Descending</a>
                         </div>
                     </div>
@@ -75,6 +76,7 @@
         <div class="row">
             <div class="col">
                 <div aria-label="Page navigation example">
+                    <!-- No need of pagination for filter page -->
                     {% if page != 'filter' %}
                     <ul class="pagination">
                         <!-- If current position of the page is higher than 0, show 'previous' button -->
