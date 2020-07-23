@@ -66,6 +66,8 @@ def profile():
 
 @app.route('/filter', methods=['POST', 'GET'])
 def filter():
+    result = request.form.get('filter_results')
+    filter = {'workspace_room': result}
     # get current page for pagination
     current_page = int(request.args.get('current_page', 1))
     # get total of all the workspaces in db
@@ -82,10 +84,6 @@ def filter():
     Else return all the workspaces where the result is the same as workspace_room in mongodb.
     Assigned this to a variable named filter
     '''
-
-    result = request.form.get('filter_results')
-    filter = {'workspace_room': result}
-
     if result is None:
         workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
         return render_template("workspaces.html",
