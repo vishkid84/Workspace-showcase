@@ -13,7 +13,11 @@
                     <p>You can view the different workspace submission by clicking on Library. You can add your own workspaces by registering or logging in if you already a user. 
                     </p>
                     <a name="edit" class="btn btn-danger m-1 text-center" href="{{url_for('get_workspaces')}}" >Show workspaces</a>
+                    {% if session['username'] %}
+                    <a name="edit" class="btn btn-danger m-1 text-center" href="{{url_for('logout')}}" >Logout</a>
+                    {% else %}
                     <a name="edit" class="btn btn-danger m-1 text-center" href="{{url_for('login')}}" >Login</a>
+                    {% endif %}
                 </div>
             </div>
         </div>  

@@ -171,14 +171,13 @@ iframe{
 
 .single-card {
     height: 80vh;
-    top: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin: 20px;
     border-radius: 15px;
 }
 
 .single-card-img {
-    min-height: 70vh;
+    min-height: 100%;
     max-height: 100%;
     object-fit: cover;
     border-radius: 15px;
@@ -194,7 +193,7 @@ iframe{
 }
 
 .single-card-content{
-    height: 75vh;
+    height: 100%;
     background-color: rgba(255, 255, 255, 0.7);
     overflow-y: auto;
 }
