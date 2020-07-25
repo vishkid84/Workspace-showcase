@@ -214,3 +214,11 @@ iframe{
     text-align: center;
     font-family: 'Fjalla One', sans-serif;
 }
+
+
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: none;
+}

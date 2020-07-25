@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    
     <div class="container filter-container">
         <div class="row justify-content-end">
             <form method="POST" action="{{url_for('filter')}}">
@@ -83,6 +82,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="container">
+        <a id="back-to-top" href="#" class="btn btn-light btn-lg back-to-top" role="button"><i class="fas fa-chevron-up"></i></a>
     </div>
 
 {% endblock %}
