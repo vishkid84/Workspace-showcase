@@ -150,6 +150,10 @@ li i{
     border-radius: 0;
 }
 
+.filter_select{
+    padding-right: 15px !important;
+}
+
 .filter-btn{
     font-size: 14px;
     margin-right: 15px;
@@ -200,7 +204,6 @@ iframe{
 
 .comments{
     font-family: 'Fjalla One', sans-serif;
-    font-size: 1.1rem;
 }
 
 

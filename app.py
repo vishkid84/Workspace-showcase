@@ -20,7 +20,7 @@ app.config["SECRET_KEY"] = os.urandom(24)
 mongo = PyMongo(app)
 
 # Number of workspaces to be displayed per page for pagination
-page_limit = 3
+page_limit = 9
 
 
 @app.route('/')
@@ -32,6 +32,7 @@ def home():
 def get_workspaces():
     result = request.form.get('filter_results')
     filtered_result = {'workspace_room': result}
+    page = request.args.get('page')
     # get current page for pagination
     current_page = int(request.args.get('current_page', 1))
     # get total of all the workspaces in db
@@ -41,19 +42,47 @@ def get_workspaces():
     # Show the maximum number of pages
     max_pages = int(math.ceil(total / page_limit))
 
-    print(result)
-
-    if result:
-        filtered_result = {'workspace_room': result}
-        total = mongo.db.workspaces.count({'workspace_room': result})
-        workspaces = mongo.db.workspaces.find(filtered_result).limit(page_limit).skip(current_position * page_limit)
-
-    else:
-        workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position * page_limit)
+    workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position * page_limit)
     return render_template("workspaces.html", workspaces=workspaces,
                            current_page=current_page, page_limit=page_limit,
                            total=total, current_position=current_position,
                            max_pages=max_pages, page='get_workspaces')
+
+
+@app.route('/filter', methods=['POST', 'GET'])
+def filter():
+    result = request.form.get('filter_results')
+    filtered_result = {'workspace_room': result}
+
+    # get current page for pagination
+    current_page = int(request.args.get('current_page', 1))
+    # get total of all the workspaces in db
+    total = mongo.db.workspaces.count({'workspace_room': result})
+    # Add current_position of the current page set at 0
+    current_position = int(request.args.get('current_position', 0))
+    # Show the maximum number of pages
+    max_pages = int(math.ceil(total / page_limit))
+
+    '''
+    Get workspace name from 'filter_results' form,
+    assigned it as variable result.
+    If result is none, return all the workspaces.
+    Else return all the workspaces where the result is the same as workspace_room in mongodb.
+    Assigned this to a variable named filter
+    '''
+    if result is None:
+        workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
+        return render_template("workspaces.html",
+                               workspaces=workspaces, current_page=current_page,
+                               page_limit=page_limit, total=total,
+                               current_position=current_position,
+                               max_pages=max_pages, page='get_workspaces')
+
+    workspaces = mongo.db.workspaces.find({'workspace_room': result}).sort("_id", -1).limit(page_limit).skip(current_position)
+    return render_template('workspaces.html', workspaces=workspaces,
+                           current_page=current_page, page_limit=page_limit,
+                           total=total, current_position=current_position,
+                           max_pages=max_pages, page='filter', result=result)
 
 
 @app.route('/profile')
@@ -89,7 +118,7 @@ def sort_ascending():
     If user is logged in, check if page name is profile.
         If it is, that means they are in the 'My profile' page. Sort ascending based on workspace rating.
     If user is not logged in, redirect to login page
-    If page name is not profile, it means they are in the workspaces page. Sort ascending in that page. 
+    If page name is not profile, it means they are in the workspaces page.  
     '''
     page = request.args.get('page')
     if 'username' in session:
@@ -98,19 +127,6 @@ def sort_ascending():
             return render_template("profile.html", workspaces=workspaces,
                                    session_username=session['username'],
                                    page='profile')
-
-    result = request.form.get('filter_results')
-    filter = mongo.db.workspaces.find({'workspace_room': 'Living room'})
-    if page == 'filter':
-        if result == 'Living room':
-            workspaces = filter.sort("workspace_rating", 1).limit(page_limit).skip(current_position)
-            return render_template('workspaces.html',
-                                   workspaces=workspaces,
-                                   current_page=current_page,
-                                   page_limit=page_limit, total=total,
-                                   current_position=current_position,
-                                   max_pages=max_pages,
-                                   page='filter', result=result,)
 
     workspaces = mongo.db.workspaces.find().sort("workspace_rating", 1).limit(page_limit).skip(current_position)
     return render_template("workspaces.html",
@@ -135,7 +151,7 @@ def sort_descending():
     If user is logged in, check if page name is profile.
         If it is, that means they are in the 'My profile' page. Sort descending based on workspace rating.
     If user is not logged in, redirect to login page
-    If page name is not profile, it means they are in the workspaces page. Sort descending in that page.
+    If page name is not profile, it means they are in the workspaces page.
     '''
 
     page = request.args.get('page')
