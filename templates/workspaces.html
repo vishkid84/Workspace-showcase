@@ -4,20 +4,19 @@
     
     <div class="container filter-container">
         <div class="row justify-content-end">
-            <form action="{{url_for('filter')}}" method="POST">
+            <form method="POST">
                 <div class="form-row align-items-center">
                     <div class="col-auto mb-2">
-                    <select class="custom-select mr-sm-2" id="filter-results" name="filter_results" aria-label="filter_results">
-                        <option selected disabled>Filter results by:</option>
+                    <select id="mySelect" class="custom-select mr-sm-2" name="filter_results" aria-label="filter_results" onchange="if(this.value != 'filterResults') { this.form.submit(); }">
                         <optgroup label="Workspace room"> 
-                        <!-- If result specified in app.py is the same as value, set that to selected -->
-                            <option value="Balcony" {% if result == 'Balcony' %} selected=selected  {% endif %}>Balcony</option>
-                            <option value="Bedroom" {% if result == 'Bedroom' %} selected=selected {% endif %}>Bedroom</option>
-                            <option value="Kitchen" {% if result == 'Kitchen' %} selected=selected {% endif %}>Kitchen</option>
-                            <option value="Living room" {% if result == 'Living room' %} selected=selected {% endif %}>Living room</option>
-                            <option value="Office room" {% if result == 'Office room' %} selected=selected {% endif %}>Office room</option>
-                            <option value="Outdoors" {% if result == 'Outdoors' %} selected=selected {% endif %}>Outdoors</option>
-                            <option value="Others" {% if result == 'Outdoors' %} selected=selected {% endif %}>Others</option>
+                            <option value="filterResults" selected disabled >Filter results by:</option>
+                            <option value="Balcony" >Balcony</option>
+                            <option value="Bedroom" >Bedroom</option>
+                            <option value="Kitchen" >Kitchen</option>
+                            <option value="Living room" >Living room</option>
+                            <option value="Office room" >Office room</option>
+                            <option value="Outdoors" >Outdoors</option>
+                            <option value="Others" >Others</option>
                         </optgroup>
                     </select>
                     </div>
@@ -38,8 +37,8 @@
                             Sort by Worskpace Rating
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{{url_for('sort_ascending')}}" >Ascending</a>
-                            <a class="dropdown-item" href="{{url_for('sort_descending')}}">Descending</a>
+                            <button class="dropdown-item" name='ascending' >Ascending</button>
+                            <button class="dropdown-item" href="{{url_for('sort_descending')}}">Descending</button>
                         </div>
                     </div>
                 </div>
@@ -76,13 +75,12 @@
         <div class="row">
             <div class="col">
                 <div aria-label="Page navigation example">
-                    <!-- No need of pagination for filter page -->
-                    
+                    <form method="POST">
                     <ul class="pagination">
                         <!-- If current position of the page is higher than 0, show 'previous' button -->
                         {% if current_position >0 %}
                             <li class="page-item">
-                            <a class="page-link" href="{{url_for('get_workspaces', current_page=current_page - 1, current_position=current_position - page_limit)}}" aria-label="Previous">
+                            <a class="page-link" href="{{url_for('get_workspaces', current_page=current_page - 1)}}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only">Previous</span>
                             </a>
@@ -93,18 +91,17 @@
                             <!-- Show 'next' as long as the maximum page is less than the current page, wont show otherwise  -->
                         {% if current_page < max_pages  %}
                             <li class="page-item">
-                            <a class="page-link" href="{{url_for('get_workspaces', current_page=current_page + 1, current_position=current_position + page_limit)}}" aria-label="Next">
+                            <a class="page-link" href="{{url_for('get_workspaces', current_page=current_page + 1)}}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only">Next</span>
                             </a>
                             </li>
                         {% endif %}
                     </ul>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    
-    
 
 {% endblock %}

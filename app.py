@@ -20,7 +20,7 @@ app.config["SECRET_KEY"] = os.urandom(24)
 mongo = PyMongo(app)
 
 # Number of workspaces to be displayed per page for pagination
-page_limit = 9
+page_limit = 3
 
 
 @app.route('/')
@@ -28,18 +28,28 @@ def home():
     return render_template("home.html")
 
 
-@app.route('/get_workspaces')
+@app.route('/get_workspaces', methods=['POST', 'GET'])
 def get_workspaces():
+    result = request.form.get('filter_results')
+    filtered_result = {'workspace_room': result}
     # get current page for pagination
     current_page = int(request.args.get('current_page', 1))
     # get total of all the workspaces in db
-    total = mongo.db.workspaces.count({})
+    total = mongo.db.workspaces.count()
     # Add current_position of the current page set at 0
-    current_position = int(request.args.get('current_position', 0))
+    current_position = (current_page - 1)
     # Show the maximum number of pages
     max_pages = int(math.ceil(total / page_limit))
 
-    workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
+    print(result)
+
+    if result:
+        filtered_result = {'workspace_room': result}
+        total = mongo.db.workspaces.count({'workspace_room': result})
+        workspaces = mongo.db.workspaces.find(filtered_result).limit(page_limit).skip(current_position * page_limit)
+
+    else:
+        workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position * page_limit)
     return render_template("workspaces.html", workspaces=workspaces,
                            current_page=current_page, page_limit=page_limit,
                            total=total, current_position=current_position,
@@ -62,41 +72,6 @@ def profile():
     return render_template("profile.html", workspaces=workspaces,
                            session_username=session['username'],
                            page='profile')
-
-
-@app.route('/filter', methods=['POST', 'GET'])
-def filter():
-    result = request.form.get('filter_results')
-    filter = {'workspace_room': result}
-    # get current page for pagination
-    current_page = int(request.args.get('current_page', 1))
-    # get total of all the workspaces in db
-    total = mongo.db.workspaces.count({})
-    # Add current_position of the current page set at 0
-    current_position = int(request.args.get('current_position', 0))
-    # Show the maximum number of pages
-    max_pages = int(math.ceil(total / page_limit))
-
-    '''
-    Get workspace name from 'filter_results' form,
-    assigned it as variable result.
-    If result is none, return all the workspaces.
-    Else return all the workspaces where the result is the same as workspace_room in mongodb.
-    Assigned this to a variable named filter
-    '''
-    if result is None:
-        workspaces = mongo.db.workspaces.find().sort("_id", -1).limit(page_limit).skip(current_position)
-        return render_template("workspaces.html",
-                               workspaces=workspaces, current_page=current_page,
-                               page_limit=page_limit, total=total,
-                               current_position=current_position,
-                               max_pages=max_pages, page='get_workspaces')
-
-    workspaces = mongo.db.workspaces.find(filter).sort("_id", -1).limit(page_limit).skip(current_position)
-    return render_template('workspaces.html', workspaces=workspaces,
-                           current_page=current_page, page_limit=page_limit,
-                           total=total, current_position=current_position,
-                           max_pages=max_pages, page='filter', result=result)
 
 
 @app.route('/sort_ascending')
