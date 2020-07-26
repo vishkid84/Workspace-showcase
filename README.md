@@ -75,18 +75,18 @@ I have used defensive design where users are given the choice to select only tho
 For the image field, user needs to enter the image url. Users are given the option to upload the image to 'https://postimages.org/' and get 'Direct link' url to paste in this field. If they are uncomfortable in doing so, they can copy the url of a similar looking image from the web. Since the image acts only as a secondary source for the purpose of this site, it does not make a huge impact even if they don't enter their exact image. <br>
 Once user clicks submit, it creates a new workspace with the details provided and takes them to their profile page. 
 
-### My profile page
+#### My profile page
 
 User needs to be logged in to access this page. This page has all the workspaces added by the user. The UI is similar to the workspaces page. This page includes a sort button which provides the option to sort by the rating they have given for their workspaces. This could helpe a user make a comparison with their own workspace setups. 
 
-### Graph view
+#### Graph view
 
 This page shows 3 graphs which helps in a visual comparison. <br>
 Graph 1 shows the overall happiness index. It is a donut chart which splits the happiness index based on the count of users' selection of happiness or stress when they added the workspaces. <br>
 Graph 2 shows the workspace preference as a donut chart. This shows a quick view into users' preference in working from office, remote or bit of both. <br>
 Graph 3 shows the happiness index and the type of workspace room. This serves as a tool to compare the happiness index with different workspace setups. 
 
-### Login/Registration
+#### Login/Registration
 
 These pages are for users to register or login. The login link in navbar takes them to the login page but if they dont have an existing account, they can click on the link below to go to the register page. 
 
@@ -160,7 +160,7 @@ I have pasted a screenshot of that below.
 #### Validations
 Validated html and css with W3C validator and Python Flask with pep8 online checker.
 
-### Noted errors and bugs
+#### Noted errors and bugs
 
 An initial idea was to add pagination for the filtered results as well in the workspaces page but the pagination next and previous buttons were returning all the results instead of the filtered results. Tried adding the filter to the 'get workspaces' route and adding that as a session instead of keeping that as a separate route 'filter'. This worked to some extent but the filtered results were returning in the next page only if the selection was made a second time.
 As a workaround for now, I removed pagination for the filtered results but added scroll-to-top feature. 
