@@ -1,7 +1,7 @@
-<p float="left" align='middle'>
-  <img src="/docs/desktop_view.png" width="100" />
-  <img src="/docs/mobile_view.png" width="100" /> 
-</p>
+<div align="center">
+<img src="docs/mockup.png" target="_blank" rel="noopener" alt="workspace-showcase">
+<h2>workspace-showcase</h2>
+</div>
 
 # workspace-showcase
 
@@ -23,12 +23,13 @@ It would be interesting to see the different work areas<br>
 
 ### Strategy
 
-The idea of the project is to compare the workspaces of different users to understand how the different work settings affect the mental health. 
+The idea of the project is to compare the workspaces of different users to understand how the different work settings affect different individuals.
+Based on details provide by the users, it should be easy to assess or compare the overall stress level or happiness which could be considered a crucial factor in mental health.
 It also aims at understanding how users would like to work in the future whether it would be in an office setting or remote or a balance of both. 
 
 ### Scope
 
-As someone working away from office at the moment, though I am mostly happy with my setup I sometimes get stressed. 
+As someone working away from office at the moment, though I am mostly happy with my setup I sometimes get stressed but it might not be same for all.
 To understand what areas to include in the site, I talked to a few colleagues and friends in the similar situation. 
 Based on the input and user stories, I identified key areas to include in a workspace user insert in the site. 
 1. Workspace room or setup
@@ -49,20 +50,19 @@ The home page gives brief introduction about the site. It has two buttons - View
 
 This page showcases all the workspaces added in by all users. All the details except for the comments is shown in each workspace. This serves as a quick look of each workspace. When clicked on the comment icon in each workspace, it takes to the detailed view of that particular workspace which has the image as background and also includes the comments along with the other details. Users can then exit out of this by clicking on the close button. <br>
 Pagination is added in the workspaces page so that all the results are not shown in one page. Only 9 results are shown per page. <br>
-This page includes a filter dropdown where they can filter the results by the workspace room. With this, only the results with the selected workspace room are returned. <br>
-Another feature added in this page is sort ascending or descending by rating. This helps in a quick glance of the highest or the lowest rating. 
+This page includes a filter dropdown where they can filter the results by the workspace room. With this, only the results with the selected workspace room are returned. There is no pagination for the filtered results but scroll-to-top feature is added to scroll to the top. <br>
 
 #### Add Workspaces page
 
 User needs to be logged in to access this page. If user is not logged in, it takes them to the login page. <br>
 This page has form with 5 fields. These fields are used to populate the workspaces. <br>
-I have used defensive design where users are given the choice to select only those in the list of dropdown. <br>
+I have used defensive design where users are given the choice to select only those in the list of dropdown. To avoid huge paragraphs as comments, the number of characters are limited to 300 characters.<br>
 For the image field, user needs to enter the image url. Users are given the option to upload the image to 'https://postimages.org/' and get 'Direct link' url to paste in this field. If they are uncomfortable in doing so, they can copy the url of a similar looking image from the web. Since the image acts only as a secondary source for the purpose of this site, it does not make a huge impact even if they don't enter their exact image. <br>
 Once user clicks submit, it creates a new workspace with the details provided and takes them to their profile page. 
 
 ### My profile page
 
-User needs to be logged in to access this page. This page has all the workspaces added by the user. The UI is similar to the workspaces page. The sort button is added in this page as well. 
+User needs to be logged in to access this page. This page has all the workspaces added by the user. The UI is similar to the workspaces page. This page includes a sort button which provides the option to sort by the rating they have given for their workspaces. This could helpe a user make a comparison with their own workspace setups. 
 
 ### Graph view
 
@@ -77,7 +77,7 @@ These pages are for users to register or login. The login link in navbar takes t
 
 ### Skeleton
 
-You can see the wireframes saved as pdf below:
+The schema for the website with mongodb can be found [here](/wireframes/schema.pdf). You can see the wireframes saved as pdf below:
 
 [Wireframe for desktop](/wireframes/Wireframe_desktop.pdf)<br>
 [Wireframe for tablet](/wireframes/Wireframe_tablet.pdf)<br>
@@ -104,13 +104,16 @@ The fonts used are Fjalla One and Noto Sans
 3. Login: Users register can login using their registered username and password
 4. Encrypted password: Password is hashed and encrypted using a Python library Bcrypt. Only the encrypted password is accessable in the database. 
 5. Profile page: Logged in users can access their own profile page which has the workspaces they have added
-6. CRUD: Anyone can view the workspaces but to insert, edit and delete the workspaces they need to be logged in. Users can make these changes only on the workspaces added by them which are available in the profile page. 
-7. Pagination: Only 9 results available per page but users can go to next or previous using the pagination feature
+6. CRUD: Anyone can view the workspaces but to insert, edit and delete the workspaces they need to be logged in. Users can make these changes only on the workspaces added by them which are available in their profile page. 
+7. Pagination: Only 9 results available per page but users can go to next or previous using the pagination feature. 
+8. Filter: Users can filter the result by using the filter available in the workspaces page. Pagination is not available when filtered. 
+9. Scroll to top: By clicking on the icon to go to the top, users can go to the top of the page instead of scrolling all the way. 
 8. Charts: Charts are automatically updated based on the data uploaded by users. It takes some time to reflect the change but still a nice feature for the purpose of the website. One thing noticed is that the charts are not viewable in Internet Explorer and Edge. 
 
 ### Features Left to Implement
-- Filter to filter result by any category
-- User ability to delete their profile
+- Pagination for filtered results
+- Sort by rating to be added on workspaces pages as well
+- User ability to edit and delete their profile
 
 ## Technologies Used
 
@@ -118,8 +121,40 @@ HTML <br>
 CSS <br>
 Google fonts <br>
 Bootstrap <br>
-Javascript <br>
-jQuery <br>
-Python 3<br>
-Flask<br>
-Heroku
+Javascript/jQuery used as part of Bootstrap and also for few other functions <br>
+Python 3 to create the app, create the routes, create the functions within those routes and all back end interactions.<br>
+Flask framework to create and populate the templates<br>
+MongoDB Atlas used as a backend framework.<br>
+Heroku: The cloud based platform is used for deployment of the site. 
+
+## Testing
+
+Every new code was tested by running the app wiht the debugger on. If any routes did not work, the debugger would catch that. 
+I used an [Excel](testing/Testing.png) to update my testing. 
+I have pasted a screenshot of that below. 
+
+
+#### Links tested
+All the links in the site have been tested manually and found to be working successfully. <br> I used an [Excel](testing/Testing.xlsx) to update my testing. 
+I have pasted a screenshot of that below. 
+
+![Test matrix](testing/Testing.png)
+
+
+#### Validations
+Validated html and css with W3C validator and Python Flask with pep8 online checker.
+
+### Noted errors and bugs
+
+An initial idea was to add pagination for the filtered results as well in the workspaces page but the pagination next and previous buttons were returning all the results instead of the filtered results. Tried adding the filter to the 'get workspaces' route and adding that as a session instead of keeping that as a separate route 'filter'. This worked to some extent but the filtered results were returning in the next page only if the selection was made a second time.
+As a workaround for now, I removed pagination for the filtered results but added scroll-to-top feature. 
+
+#### Responsiveness and browser compatibility
+
+The website is created to be responsive, the way the results appear is different in mobile, tablet and desktop. Found that Overflow-y to be not working on google chrome on some mobile devices, seems to be a bug with the Chrome version installed in that particular device. Works with all other browsers. Red transparent overlay not working on some mobile devices but working on most. <br>
+Charts does not appear on IE and Edge but works with all the other browsers. <br>
+Tested across multiple devices using devices directly where available and by using https://www.browserstack.com/ for others. <br>
+
+#### Browser compatibility
+
+
