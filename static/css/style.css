@@ -159,6 +159,13 @@ li i{
     margin-right: 15px;
 }
 
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    display: none;
+}
+
 
 /* ---------Charts page--------- */
 
@@ -194,7 +201,7 @@ iframe{
 
 .single-card-content{
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.75);
     overflow-y: auto;
 }
 
@@ -206,6 +213,11 @@ iframe{
     font-family: 'Fjalla One', sans-serif;
 }
 
+.about-highlight{
+    color: #9A1750;
+    font-weight: bold;
+}
+
 
 /* ---------Error pages--------- */
 .jumbotron{
@@ -215,9 +227,3 @@ iframe{
 }
 
 
-.back-to-top {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    display: none;
-}

@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="form-group">
-                <label for="sel1">Select your workspace area:</label>
+                <label for="workspace_room">Select your workspace area:</label>
                 <select class="form-control" id="workspace_room" name="workspace_room" required>
                     <option disabled selected value="">Choose...</option>
                     {% for room in rooms %}
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="form-group">
-                <label for="sel1">How would you rate your workspace?</label>
+                <label for="workspace_rating">How would you rate your workspace?</label>
                 <select class="form-control" id="workspace_rating" name="workspace_rating" required>
                     <option disabled selected value="">Choose...</option>
                     {% for rating in ratings %}
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="form-group">
-                <label for="sel1">Would you prefer remote working or office?</label>
+                <label for="workspace_preference">Would you prefer remote working or office?</label>
                 <select class="form-control" id="workspace_preference" name="workspace_preference" required>
                     <option disabled selected value="">Choose...</option>
                     {% for preference in preferences %}
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="form-group">
-                <label for="sel1">How happy or stressed are you working away from office?</label>
+                <label for="happiness_index">How happy or stressed are you with this workspace?</label>
                 <select class="form-control" id="happiness_index" name="happiness_index" required>
                     <option disabled selected value="">Choose...</option>
                     {% for index in indexes %}
@@ -70,14 +70,14 @@
 
                 <div class="form-group">
                     <label for="image">Enter the image url</label>
-                    <input type="text" class="form-control" id="image" name="image" value="{{workspace.image}}" required></input>
-                    <small class="form-text text-muted">You can upload you workspace <a href="https://postimages.org/" target="_blank">here</a> and copy the <b> 'Direct Link'</b> which can be pasted here. <br>If you are not comfortable in uploading your workspace, you can copy an image url from the web which looks similar. 
+                    <input type="text" class="form-control" id="image" name="image" value="{{workspace.image}}" required>
+                    <small class="form-text text-muted">You can upload you workspace <a href="https://postimages.org/" target="_blank">here</a> and copy the <b> 'Direct Link'</b> which can be pasted here. <br>If you are not comfortable in uploading your workspace, you can copy an image url from the web which looks similar. Make sure you copy the image adress and not link adress. 
                     </small>
                 </div>
 
                 <div class="form-group">
                     <label for="comments">Comments:</label>
-                    <textarea class="form-control" rows="5" id="comments" name="comments">{{workspace.comments}}</textarea>
+                    <textarea class="form-control" rows="5" id="comments" name="comments" maxlength="300" placeholder="Enter up to 50 words or less">{{workspace.comments}}</textarea>
                 </div>
                 
                 <div class="row">
