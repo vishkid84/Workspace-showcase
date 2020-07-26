@@ -11,6 +11,21 @@ where users can post their current remote workspace or their preferred workspace
 
 You can find the deployed site [here](http://workspace-showcase.herokuapp.com/)
 
+## Table of Contents
+
+1. [**UX**](#ux)
+- [**Strategy**](#strategy)
+- [**Scope**](#scope)
+- [**Structure**](#structure)
+- [**Skeleton**](#skeleton)
+- [**Surface**](#surface)
+* [Existing Features](#existing)
+* [Features Left to Implement](#features)
+2. [**Technologies**](#technologies)
+3. [**Testing**](#testing)
+4. [**Deployment**](#deployment)
+5. [**Credits & Acknowledgements**](#credits)
+
 ## UX
 
 ### User stories
@@ -125,11 +140,12 @@ Javascript/jQuery used as part of Bootstrap and also for few other functions <br
 Python 3 to create the app, create the routes, create the functions within those routes and all back end interactions.<br>
 Flask framework to create and populate the templates<br>
 MongoDB Atlas used as a backend framework.<br>
+MongoDB Charts for chart representation<br>
 Heroku: The cloud based platform is used for deployment of the site. 
 
 ## Testing
 
-Every new code was tested by running the app wiht the debugger on. If any routes did not work, the debugger would catch that. 
+Every new code was tested by running the app wiht the debugger on. 
 I used an [Excel](testing/Testing.png) to update my testing. 
 I have pasted a screenshot of that below. 
 
@@ -151,10 +167,47 @@ As a workaround for now, I removed pagination for the filtered results but added
 
 #### Responsiveness and browser compatibility
 
-The website is created to be responsive, the way the results appear is different in mobile, tablet and desktop. Found that Overflow-y to be not working on google chrome on some mobile devices, seems to be a bug with the Chrome version installed in that particular device. Works with all other browsers. Red transparent overlay not working on some mobile devices but working on most. <br>
+The website is created to be responsive, the way the results appear is different in mobile, tablet and desktop. Found that Overflow-y to be not working on google chrome on some mobile devices, seems to be a bug with the Chrome version installed in that particular device. Works with all other browsers. <br>
+Red transparent overlay not working on some mobile devices but working on most. They are not shown in IE and Edge as well but that is okay since the content is still readable.<br>
 Charts does not appear on IE and Edge but works with all the other browsers. <br>
 Tested across multiple devices using devices directly where available and by using https://www.browserstack.com/ for others. <br>
 
-#### Browser compatibility
+## Deployment
+
+I used Gitpod to develop the site using Python 3 and deployed to Heroku via Github. <br>
+To run the site locally, you can clone this repository. See the steps to clone the repo here : https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository. <br>
+If you are cloning the site, make sure you have Python 3 installed for this to work. Then create a virtual environment with your IDE. <br>
+Run the requirements.txt file to install the relevant required packages dependencies.<br>
+Run the app.py to run the Python file in the Terminal. <br>
+To deploy to Heorku, the following steps can be followed:
+1. Login to Heroku
+2. Create an app name to deploy our application, the name should be unique. 
+3. In your terminal, login to Heroku using $ heroku login
+4. $ pip3 freeze --local > requirements.txt to create the requirements.txt
+5. $ echo web: python app.py > Procfile to create Procfile
+6. Add and commit to git. To push to Heroku, $ git push heroku master
+
+## Credits
+
+### Content
+
+All the text content were written by me.
+
+### Media
+
+No images used in the site except for the workspace images. They are added by the users. 
+
+### Acknowledgements
+
+Creating user login with Flask tutorial [Pretty Printed](https://www.youtube.com/watch?v=vVx1737auSE). <br>
+Udemy [Jose Portilla](https://www.udemy.com/course/python-and-flask-bootcamp-create-websites-using-flask/)<br>
+Scroll to top found [here](https://codepen.io/michalwyrwa/pen/GBaPPj)<br>
+<br>
+
+Special thanks to my mentor Aaron Sinnott for helping me better understand sessions. 
+
+###### Disclaimer: This project was created for educational use only as part of the Code Institute Full Stack Software Development Course</i>
+
+
 
 
